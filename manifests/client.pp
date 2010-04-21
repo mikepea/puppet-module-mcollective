@@ -24,7 +24,7 @@ class mcollective::client::plugins {
     File { 
         owner => root,
         group => root,
-        mode  => 0444,
+        mode  => 0555,
         require => Class["mcollective::client::install"],
     }
 
