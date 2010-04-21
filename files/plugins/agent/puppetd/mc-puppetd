@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+
+# Client program for the mcollective puppetd agent found at http://code.google.com/p/mcollective-plugins/wiki/AgentPuppetd
+#
+# Released under the GPLv2
+
+require 'mcollective'
+
+include MCollective::RPC
+
+options = rpcoptions do |parser, options|
+    parser.define_head "Manage remote puppet daemons"
+    parser.banner = "Usage: mc-puppetd [enable|disable|runonce|status]"
+end
+
+puppetd = rpcclient("puppetd", :options => options)
+
+if ARGV.length == 1
+    command = ARGV.shift
+else
+    puts("Please specify a command")
+    exit 1
+end
+
+if command == "status"
+    puppetd.send(command).each do |node|
+        node[:statuscode] == 0 ? msg = node[:data][:output] : msg = node[:statusmsg]
+
+        puts "%-40s %s" % [ node[:sender], msg ]
+    end
+else
+    printrpc puppetd.send(command)
+end
+
+
+printrpcstats
+# vi:tabstop=4:expandtab:ai
