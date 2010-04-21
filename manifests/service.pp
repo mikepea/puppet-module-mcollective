@@ -26,6 +26,11 @@ class mcollective::service::actual {
 
 class mcollective::config {
 
+    case $operatingsystem {
+        debian,ubuntu: { $libdir = "/usr/share/mcollective/plugins" }
+        redhat,centos: { $libdir = "/usr/libexec/mcollective" }
+    }
+
     File { 
         owner => root,
         group => root,
@@ -53,7 +58,10 @@ class mcollective::config {
 
 class mcollective::plugins {
 
-    $p_base = "/usr/share/mcollective/plugins/mcollective"
+    case $operatingsystem {
+        debian,ubuntu: { $p_base = "/usr/share/mcollective/plugins/mcollective" }
+        redhat,centos: { $p_base = "/usr/libexec/mcollective/mcollective" }
+    }
     $s_base = "puppet://$fileserver/mcollective/plugins"
 
     File { 
