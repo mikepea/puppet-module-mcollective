@@ -26,3 +26,12 @@ factsource = yaml
 plugin.yaml = /etc/mcollective/facts.yaml
 <% end -%>
 
+<% if has_variable?('puppetversion') -%>
+# Puppet setup
+<%   if puppetversion =~ /^0\.24\./ -%>
+classesfile = /var/lib/puppet/state/classes.txt
+<%   else -%>
+classesfile = /var/lib/puppet/classes.txt
+<%   end -%>
+<% end -%>
+
