@@ -25,8 +25,7 @@ class mcollective::client::plugins {
         owner => root,
         group => root,
         mode  => 0444,
-        require => Class["mcollective::install"],
-        notify => Service["mcollective"],
+        require => Class["mcollective::client::install"],
     }
 
     file { "${bin_dir}/mc-service": source => "${s_base}/agent/service/mc-service" }
