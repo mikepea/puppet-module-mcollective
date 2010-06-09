@@ -8,24 +8,24 @@ daemonize = 1
 <% if has_variable?('mcollective_psk' ) -%>
 securityprovider = psk
 plugin.psk = <%= mcollective_psk %>
-<% end -%>
 
+<% end -%>
 <% if has_variable?('mcollective_stomp_host') -%>
 connector = stomp
 plugin.stomp.host = <%= mcollective_stomp_host %>
 plugin.stomp.port = <%= mcollective_stomp_port %>
 plugin.stomp.user = <%= mcollective_stomp_user %>
 plugin.stomp.password = <%= mcollective_stomp_password %>
-<% end -%>
 
+<% end -%>
 # Facts
 <% if has_variable?('mcollective_factsource') -%>
-factsource = <%= mcollective_factsource -%>
+factsource = <%= mcollective_factsource %>
 <% else -%>
 factsource = yaml
 plugin.yaml = /etc/mcollective/facts.yaml
-<% end -%>
 
+<% end -%>
 <% if has_variable?('puppetversion') -%>
 # Puppet setup
 <%   if puppetversion =~ /^0\.24\./ -%>
@@ -33,5 +33,13 @@ classesfile = /var/lib/puppet/state/classes.txt
 <%   else -%>
 classesfile = /var/lib/puppet/classes.txt
 <%   end -%>
-<% end -%>
 
+<% end -%>
+<% if has_variable?('mcollective_nrpe_conf_dir') -%>
+plugin.nrpe.conf_dir = <%= mcollective_nrpe_conf_dir %>
+
+<% end -%>
+<% if has_variable?('mcollective_filemgr_touch_file') -%>
+plugin.filemgr.touch_file = <%= mcollective_filemgr_touch_file %>
+
+<% end -%>
