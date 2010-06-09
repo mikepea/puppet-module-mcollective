@@ -31,7 +31,7 @@ class mcollective::config {
         redhat,centos: { $libdir = "/usr/libexec/mcollective" }
     }
 
-    File { 
+    File {
         owner => root,
         group => root,
         mode  => 0440,
@@ -41,19 +41,30 @@ class mcollective::config {
     Dir {
         owner => root,
         group => root,
-        mode  => 0750,
+        mode  => 0755,
         require => Class["mcollective::install"]
     }
-    
+
     dir { "/etc/mcollective": }
-    file { "/etc/mcollective/server.cfg": 
+    file { "/etc/mcollective/server.cfg":
         content => template("mcollective/server.cfg.erb"),
         notify  => Service["mcollective"]
     }
-    file { "/etc/mcollective/facts.yaml": 
-        content => template("mcollective/facts.yaml.erb") 
+    file { "/etc/mcollective/facts.yaml":
+        content => template("mcollective/facts.yaml.erb")
     }
-    
+
+    @file { "/etc/nagios/nrpe_conf.d/mcollective_touch_check.cfg":
+        tag => "nagios_nrpe_check",
+        ensure => absent,
+    }
+
+    @nagios::nrpe_command { "check_mcollective_touch":
+        command   => "check_file_age",
+        parameters => "-w 600 -c 1200 /var/run/mcollective.plugin.filemgr.touch",
+        cplugdir  => 'system'
+    }
+
 }
 
 class mcollective::plugins {
@@ -64,7 +75,7 @@ class mcollective::plugins {
     }
     $s_base = "puppet://$fileserver/mcollective/plugins"
 
-    File { 
+    File {
         owner => root,
         group => root,
         mode  => 0444,
@@ -73,10 +84,11 @@ class mcollective::plugins {
     }
 
     file { "${p_base}/facts/facter.rb": source => "${s_base}/facts/facter/facter.rb" }
-    file { "${p_base}/agent/puppet-service.rb": source => "${s_base}/agent/service/puppet-service.rb" }
-    file { "${p_base}/agent/puppet-package.rb": source => "${s_base}/agent/package/puppet-package.rb" }
+    file { "${p_base}/agent/service.rb": source => "${s_base}/agent/service/puppet-service.rb" }
+    file { "${p_base}/agent/package.rb": source => "${s_base}/agent/package/puppet-package.rb" }
     file { "${p_base}/agent/nrpe.rb": source => "${s_base}/agent/nrpe/nrpe.rb" }
     file { "${p_base}/agent/puppetd.rb": source => "${s_base}/agent/puppetd/puppetd.rb" }
+    file { "${p_base}/agent/filemgr.rb": source => "${s_base}/agent/filemgr/filemgr.rb" }
 
 }
 
@@ -90,12 +102,12 @@ class mcollective::install {
 
 class mcollective::install::redhat {
 
-    package { "stomp": 
-        provider => gem, 
+    package { "stomp":
+        provider => gem,
         ensure => "1.1",
     }
 
-    package { "mcollective": 
+    package { "mcollective":
         ensure => present,
         require => Package["stomp"],
     }
@@ -104,12 +116,12 @@ class mcollective::install::redhat {
 
 class mcollective::install::debian {
 
-    package { "stomp": 
-        provider => gem, 
+    package { "stomp":
+        provider => gem,
         ensure => "1.1",
     }
 
-    package { "mcollective": 
+    package { "mcollective":
         ensure => present,
         require => Package["stomp"],
     }

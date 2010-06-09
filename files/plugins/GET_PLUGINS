@@ -1,5 +1,0 @@
-#!/bin/sh
-
-BASE="http://mcollective-plugins.googlecode.com/svn/trunk"
-
-svn --force export $BASE/ .
