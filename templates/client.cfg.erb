@@ -4,14 +4,19 @@ logfile = /dev/null
 loglevel = info
 
 # Plugins 
+<% if has_variable?('mcollective_psk' ) -%>
 securityprovider = psk
-plugin.psk = unset
+plugin.psk = <%= mcollective_psk %>
 
+<% end -%>
+<% if has_variable?('mcollective_stomp_host') -%>
 connector = stomp
-plugin.stomp.host = stomp.example.com
-plugin.stomp.port = 6163
-plugin.stomp.user = mcollective
-plugin.stomp.password = marionette
+plugin.stomp.host = <%= mcollective_stomp_host %>
+plugin.stomp.port = <%= mcollective_stomp_port %>
+plugin.stomp.user = <%= mcollective_stomp_user %>
+plugin.stomp.password = <%= mcollective_stomp_password %>
+
+<% end -%>
 
 # Facts
 factsource = yaml
