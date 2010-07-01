@@ -18,5 +18,16 @@ class my_site::deployments::general::mcollective {
 
     include mcollective::service
 
+    # Include the plugins you want - alternatively, put these in your 
+    # own (eg) puppet, nrpe, etc modules.
+    include mcollective::plugin::facter
+    include mcollective::plugin::service
+    include mcollective::plugin::package
+    include mcollective::plugin::nrpe
+    include mcollective::plugin::iptables
+    include mcollective::plugin::puppetd
+    include mcollective::plugin::filemgr
+    include mcollective::plugin::process
+
 }
 
