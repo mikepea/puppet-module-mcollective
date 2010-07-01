@@ -1,5 +1,5 @@
 
-define mcollective::plugin_client ( $source ) {
+define mcollective::plugin_file ( $source ) {
 
     File { 
         owner => root,
