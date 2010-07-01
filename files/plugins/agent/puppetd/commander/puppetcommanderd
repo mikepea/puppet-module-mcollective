@@ -46,10 +46,10 @@ if File.exist?("/etc/puppetcommander.cfg")
         if config.keys == @config.keys
             @config = YAML::load_file('/etc/puppetcommander.cfg')
         else
-            raise Exception
+            raise("Could not parse config, not all options given") 
         end
     rescue Exception => e
-        puts "Failed to load config file /etc/puppetcommander.cfg"
+        puts "Failed to load config file /etc/puppetcommander.cfg: #{e}"
         exit 1
     end
 end
@@ -116,24 +116,10 @@ def concurrent_count
 end
 
 # This sends a request to a specific client only.
-#
-# We bypass the SimpleRPC internals here and just send a 
-# request without caring for the results
-#
-# From 0.4.4 we should be able to at least get the msg from the 
-# SimpleRPC libraries using the new_request method
 def run_client(client)
     log("Running agent for #{client}")
 
-    msg = {:agent  => "puppetd",
-           :action => "runonce",
-           :caller => "uid=#{Process.uid}",
-           :data   => {:forcerun => true}}           
-
-    filter = @puppet.filter.clone
-    filter["identity"] = client
-
-    @puppet.client.sendreq(msg, msg[:agent], filter)
+    @puppet.custom_request("runonce", {:forcerun => true}, client, {"identity" => client})
 end
 
 # This is the beef of things, we take a desired interval and 
@@ -226,6 +212,10 @@ end
 
 log("Looping clients with an interval of #{@config[:interval]} minutes")
 log("Restricting to #{@config[:concurrency]} concurrent puppet runs") if @config[:concurrency]
+
+Signal.trap("TERM") do
+    exit!
+end
 
 if @config[:daemonize]
     background
