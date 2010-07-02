@@ -1,5 +1,5 @@
 
-define mcollective::plugin_file ( $source ) {
+define mcollective::client_file ( $source, $prefix = "/usr/local" ) {
 
     File { 
         owner => root,
@@ -8,10 +8,9 @@ define mcollective::plugin_file ( $source ) {
         require => Class["mcollective::client::install"],
     }
 
-    $bin_dir = "/usr/local/bin"
     $s_base = "puppet://$fileserver/mcollective/plugins"
 
-    file { "${p_base}/${title}": source => "${s_base}/${source}" }
+    file { "${prefix}/bin/${title}": source => "${s_base}/${source}" }
 
 }
 
