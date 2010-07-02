@@ -1,6 +1,6 @@
 
 class mcollective::plugin::filemgr {
-    mcollective::plugin_file { "agent/filemgr.rb": source => "agent/filemgr/filemgr.rb" }
+    mcollective::plugin_file { "filemgr.rb": source => "agent/filemgr/filemgr.rb" }
 }
 
 class mcollective::plugin::filemgr::client {

@@ -10,6 +10,6 @@ class mcollective::plugin::service::ddl {
 
 class mcollective::plugin::service::client {
     include mcollective::plugin::service::ddl 
-    mcollective::client_file { "agent/mc-service": source => "agent/service/mc-service" }
+    mcollective::client_file { "mc-service": source => "agent/service/mc-service" }
 }
 
