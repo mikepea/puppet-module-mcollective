@@ -43,3 +43,17 @@ plugin.nrpe.conf_dir = <%= mcollective_nrpe_conf_dir %>
 plugin.filemgr.touch_file = <%= mcollective_filemgr_touch_file %>
 
 <% end -%>
+<% if has_variable?('mcollective_service_hasstatus') -%>
+plugin.service.hasstatus = <%= mcollective_service_hasstatus %>
+
+<% else -%>
+plugin.service.hasstatus = true
+
+<% end -%>
+<% if has_variable?('mcollective_service_hasrestart') -%>
+plugin.service.hasrestart = <%= mcollective_service_hasrestart %>
+
+<% else -%>
+plugin.service.hasrestart = true
+
+<% end -%>
