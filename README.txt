@@ -35,7 +35,16 @@ sensible place in your manifest heirarchy:
 There is a helper class - mcolletive::virtual_resources::sys_proctable -
 that can be included to specify this, if you don't use sys-proctable anywhere else.
 
+Alternatively, set $sys_proctable_package to be 'none' to not realize the package,
+or the alternative package name to realize if it is installed via a different 
+name/provider. 
+
+Setting up 'gem' as a provider can be problematic, especially on Debian based systems.
+Julian Simpson has a great guide at http://www.build-doctor.com/2009/12/10/gems-ubuntu-puppet/
+to help reduce the pain.
+
 If there's enough shouting that this is not acceptable, I'll find a better solution.
 
 Suggestions are welcome!
+
 

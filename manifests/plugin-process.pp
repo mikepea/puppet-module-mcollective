@@ -1,6 +1,10 @@
 
 class mcollective::plugin::process {
-    realize Package["sys-proctable"] # for process agent
+    case $mcollective_sys_proctable_package {
+        "": { realize Package["sys-proctable"] }
+        "none": { }
+        default: { realize Package["${mcollective_sys_proctable_package}"] }
+    }
     mcollective::plugin_file { "agent/process.rb": source => "agent/process/process.rb" }
 }
 
