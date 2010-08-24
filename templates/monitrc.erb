@@ -1,0 +1,5 @@
+check process mcollectived with pidfile /var/run/mcollectived.pid
+    start program  "/etc/init.d/mcollective start"
+    stop  program  "/etc/init.d/mcollective stop"
+    if 5 restarts within 5 cycles then timeout
+
