@@ -28,10 +28,10 @@ plugin.yaml = /etc/mcollective/facts.yaml
 <% end -%>
 <% if has_variable?('puppetversion') -%>
 # Puppet setup
-<%   if puppetversion =~ /^0\.24\./ -%>
-classesfile = /var/lib/puppet/state/classes.txt
+<%   if has_variable?('mcollective_puppet_classesfile') -%>
+classesfile = <%= mcollective_puppet_classesfile -%>
 <%   else -%>
-classesfile = /var/lib/puppet/classes.txt
+classesfile = /var/lib/puppet/state/classes.txt
 <%   end -%>
 
 <% end -%>
